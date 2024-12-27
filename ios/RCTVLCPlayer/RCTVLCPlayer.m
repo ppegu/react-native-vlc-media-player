@@ -3,6 +3,9 @@
 #import "React/RCTBridgeModule.h"
 #import "React/RCTEventDispatcher.h"
 #import "React/UIView+React.h"
+#import <UIKit/UIKit.h>
+
+#import <os/log.h>
 
 #if TARGET_OS_TV
 #else
@@ -22,6 +25,8 @@ static NSString *const playbackRate = @"rate";
 #if !defined(DEBUG) || !(TARGET_IPHONE_SIMULATOR)
     #define NSLog(...)
 #endif
+
+
 
 
 @implementation RCTVLCPlayer
@@ -80,6 +85,7 @@ static NSString *const playbackRate = @"rate";
                 [[[subview class] description] isEqualToString:@"MPVolumeSlider"]) {
                 strongSelf->_volumeSlider = (UISlider *)subview;
                 [self addSubview:strongSelf-> _volumeSlider];
+//                strongSelf->_volumeSlider.hidden = YES;
                 break;
             }
         }
@@ -437,6 +443,12 @@ static NSString *const playbackRate = @"rate";
     if (_player) {
         [[_player audio] setMuted:value];
     }
+}
+
+-(void)setBrightness:(float)value
+{
+    // Set screen brightness (value between 0.0 and 1.0)
+    [UIScreen mainScreen].brightness = value;
 }
 
 - (void)_release
