@@ -17,20 +17,20 @@
     "media",
     "video"
   ],
-  "author": "rmilinda@gmail.com",
+  "author": "pranpegu997@gmail.com",
   "dependencies": {
     "react-native-slider": "^0.11.0",
     "react-native-vector-icons": "^9.2.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/razorRun/react-native-vlc-media-player.git"
+    "url": "git+https://github.com/ppegu/react-native-vlc-media-player.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/razorRun/react-native-vlc-media-player/issues"
+    "url": "https://github.com/ppegu/react-native-vlc-media-player/issues"
   },
-  "homepage": "https://github.com/razorRun/react-native-vlc-media-player#readme",
+  "homepage": "https://github.com/ppegu/react-native-vlc-media-player#readme",
   "devDependencies": {
     "@expo/config-plugins": "^7.2.2",
     "@types/react": "~18.2.14"
