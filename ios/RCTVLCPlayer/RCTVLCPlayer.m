@@ -3,12 +3,15 @@
 #import "React/RCTBridgeModule.h"
 #import "React/RCTEventDispatcher.h"
 #import "React/UIView+React.h"
+
 #if TARGET_OS_TV
-#import <TVVLCKit/TVVLCKit.h>
 #else
 #import <MobileVLCKit/MobileVLCKit.h>
 #endif
+
 #import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
+
 static NSString *const statusKeyPath = @"status";
 static NSString *const playbackLikelyToKeepUpKeyPath = @"playbackLikelyToKeepUp";
 static NSString *const playbackBufferEmptyKeyPath = @"playbackBufferEmpty";
@@ -23,7 +26,7 @@ static NSString *const playbackRate = @"rate";
 
 @implementation RCTVLCPlayer
 {
-
+    
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
     VLCMediaPlayer *_player;
@@ -34,12 +37,15 @@ static NSString *const playbackRate = @"rate";
     NSString * _subtitleUri;
 
     NSDictionary * _videoInfo;
-
+    
+    UISlider * _volumeSlider;
 }
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
-    if ((self = [super init])) {
+ 
+    if ((self = [super initWithFrame:CGRectZero])) {
+                        
         _eventDispatcher = eventDispatcher;
 
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -56,6 +62,32 @@ static NSString *const playbackRate = @"rate";
 
     return self;
 }
+
+
+- (void)initializeVolumeSlider
+{
+    NSLog(@"Initializing _volumeSlider...");
+    
+    MPVolumeView *volumeView = [[MPVolumeView alloc] initWithFrame:CGRectZero];
+    volumeView.hidden = YES;  // Hide the volume view
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        __strong typeof(self) strongSelf = self;
+        
+        for (UIView *subview in volumeView.subviews) {
+            if ([subview isKindOfClass:[UISlider class]] ||
+                [[[subview class] description] isEqualToString:@"MPVolumeSlider"]) {
+                strongSelf->_volumeSlider = (UISlider *)subview;
+                [self addSubview:strongSelf-> _volumeSlider];
+                break;
+            }
+        }
+        
+        [volumeView removeFromSuperview];
+    });
+}
+
 
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
@@ -108,8 +140,11 @@ static NSString *const playbackRate = @"rate";
     NSDictionary* initOptions = [_source objectForKey:@"initOptions"];
 
     _player = [[VLCMediaPlayer alloc] init];
-	// [bavv edit end]
-
+    // [bavv edit end]
+    
+    // set the player audio volume to max 200;
+    _player.audio.volume = 200;
+    
     [_player setDrawable:self];
     _player.delegate = self;
     _player.scaleFactor = 0;
@@ -346,9 +381,26 @@ static NSString *const playbackRate = @"rate";
 
 -(void)setSeek:(float)pos
 {
-    if([_player isSeekable]){
-        if(pos>=0 && pos <= 1){
-            [_player setPosition:pos];
+    if(_player){
+        if([_player isSeekable]){
+            if(pos>=0 && pos <= 1){
+                [_player setPosition:pos];
+            }
+        }
+    }
+}
+
+- (void)setVolume:(float)volumeLevel {
+    if(!_volumeSlider){
+        [self initializeVolumeSlider];
+    }
+
+    if(_volumeSlider){
+        if (_volumeSlider.value != volumeLevel) {
+            // Ensure volume level is within valid range (0.0 to 1.0)
+            volumeLevel = MAX(0.0, MIN(1.0, volumeLevel));
+            [_volumeSlider setValue:volumeLevel animated:NO];
+            [_volumeSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
         }
     }
 }
@@ -397,7 +449,6 @@ static NSString *const playbackRate = @"rate";
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
 }
-
 
 #pragma mark - Lifecycle
 - (void)removeFromSuperview
