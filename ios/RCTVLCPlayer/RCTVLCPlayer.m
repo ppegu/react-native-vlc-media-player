@@ -44,12 +44,17 @@ static NSString *const playbackRate = @"rate";
     NSDictionary * _videoInfo;
     
     UISlider * _volumeSlider;
+    
+    NSDictionary * _systemInfo;
 }
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
  
     if ((self = [super initWithFrame:CGRectZero])) {
+        
+        // NSDictionary * systemInfo = [self getSystemInfo];
+        // self.onPlayerInit(systemInfo);
                         
         _eventDispatcher = eventDispatcher;
 
@@ -66,6 +71,23 @@ static NSString *const playbackRate = @"rate";
     }
 
     return self;
+}
+
+-(NSDictionary *)getSystemInfo
+{
+    [self initializeVolumeSlider];
+    
+    NSMutableDictionary *info = [NSMutableDictionary new];
+    
+    NSLog(@"getting system information...");
+    
+    info[@"brightness"] = @([[UIScreen mainScreen] brightness]);
+    
+    info[@"volume"] = @(_volumeSlider.value);
+    
+    _systemInfo = info;
+    
+    return info;
 }
 
 
@@ -85,7 +107,7 @@ static NSString *const playbackRate = @"rate";
                 [[[subview class] description] isEqualToString:@"MPVolumeSlider"]) {
                 strongSelf->_volumeSlider = (UISlider *)subview;
                 [self addSubview:strongSelf-> _volumeSlider];
-//                strongSelf->_volumeSlider.hidden = YES;
+                strongSelf->_volumeSlider.hidden = YES;
                 break;
             }
         }

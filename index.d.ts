@@ -4,12 +4,23 @@ import { StyleProp, ViewStyle } from "react-native";
 /**
  * Video aspect ratio type
  */
-export type PlayerAspectRatio = "16:9" | "1:1" | "4:3" | "3:2" | "21:9" | "9:16";
+export type PlayerAspectRatio =
+  | "16:9"
+  | "1:1"
+  | "4:3"
+  | "3:2"
+  | "21:9"
+  | "9:16";
 
 /**
  * Video resize mode
  */
-export type PlayerResizeMode = "fill" | "contain" | "cover" | "none" | "scale-down";
+export type PlayerResizeMode =
+  | "fill"
+  | "contain"
+  | "cover"
+  | "none"
+  | "scale-down";
 
 /**
  * VLC Player source configuration options
@@ -90,6 +101,13 @@ type OnProgressEventProps = Pick<VideoInfo, "duration" | "target"> & {
 type SimpleCallbackEventProps = Pick<VideoInfo, "target">;
 
 export type VLCPlayerCallbackProps = {
+  /**
+   * Called when the player initializes
+   *
+   * @param event - Event properties
+   */
+  onInitialized?: (event: { brightness?: number; volume: number }) => void;
+
   /**
    * Called when media starts playing returns
    *
@@ -188,6 +206,11 @@ export type VLCPlayerProps = VLCPlayerCallbackProps & {
    * Set the volume of the player
    */
   volume?: number;
+
+  /**
+   * Set the brightness of the system
+   */
+  brightness?: number;
 
   /**
    * Set to `true` or `false` to mute the player
