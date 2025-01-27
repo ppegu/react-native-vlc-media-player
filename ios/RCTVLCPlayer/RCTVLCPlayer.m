@@ -52,9 +52,6 @@ static NSString *const playbackRate = @"rate";
 {
  
     if ((self = [super initWithFrame:CGRectZero])) {
-        
-        // NSDictionary * systemInfo = [self getSystemInfo];
-        // self.onPlayerInit(systemInfo);
                         
         _eventDispatcher = eventDispatcher;
 
@@ -197,6 +194,12 @@ static NSString *const playbackRate = @"rate";
     if(_player){
         [self _release];
     }
+
+    if (self.onPlayerInit) {
+        NSDictionary * systemInfo = [self getSystemInfo];
+        self.onPlayerInit(systemInfo);
+    }
+
     _source = source;
     _videoInfo = nil;
 
