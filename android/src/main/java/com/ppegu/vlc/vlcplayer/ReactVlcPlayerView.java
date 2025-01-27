@@ -72,7 +72,6 @@ class ReactVlcPlayerView extends TextureView implements
 
     private WritableMap mVideoInfo = null;
 
-
     public ReactVlcPlayerView(ThemedReactContext context) {
         super(context);
         this.eventEmitter = new VideoEventEmitter(context);
@@ -97,6 +96,26 @@ class ReactVlcPlayerView extends TextureView implements
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         //createPlayer();
+
+        // here we can initialize the volume and brightness
+    }
+
+    private void initializeSystemInfo(){
+        try {
+            int brightness = android.provider.Settings.System.getInt(
+                    getContext().getContentResolver(),
+                    android.provider.Settings.System.SCREEN_BRIGHTNESS);
+            Log.i(TAG, "System brightness: " + brightness);
+        } catch (android.provider.Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setBrightness(int brightness){
+        android.provider.Settings.System.putInt(
+                getContext().getContentResolver(),
+                android.provider.Settings.System.SCREEN_BRIGHTNESS,
+                brightness);
     }
 
     @Override
