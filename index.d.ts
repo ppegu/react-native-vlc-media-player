@@ -106,7 +106,7 @@ export type VLCPlayerCallbackProps = {
    *
    * @param event - Event properties
    */
-  onInitialized?: (event: { brightness?: number; volume: number }) => void;
+  onPlayerInit?: (event: { brightness?: number; volume: number }) => void;
 
   /**
    * Called when media starts playing returns
