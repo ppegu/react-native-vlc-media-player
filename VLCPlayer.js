@@ -25,8 +25,8 @@ export default class VLCPlayer extends Component {
     this._onOpen = this._onOpen.bind(this);
     this._onLoadStart = this._onLoadStart.bind(this);
     this._onLoad = this._onLoad.bind(this);
+    this._onPlayerInit = this._onPlayerInit.bind(this);
     this.changeVideoAspectRatio = this.changeVideoAspectRatio.bind(this);
-    this.onPlayerInit = this._onPlayerInitialize(this);
   }
   static defaultProps = {
     autoplay: true,
@@ -84,15 +84,15 @@ export default class VLCPlayer extends Component {
     }
   }
 
-  _onPlayerInitialize(e) {
-    if (this.props.onPlayerInit) {
-      this.props.onPlayerInit(e);
-    }
-  }
-
   _onProgress(event) {
     if (this.props.onProgress) {
       this.props.onProgress(event.nativeEvent);
+    }
+  }
+
+  _onPlayerInit(event) {
+    if (this.props.onPlayerInit) {
+      this.props.onPlayerInit(event.nativeEvent);
     }
   }
 
@@ -166,7 +166,7 @@ export default class VLCPlayer extends Component {
         patchVer: source.patchVer || 0,
       },
       onVideoLoadStart: this._onLoadStart,
-      onPlayerInit: this._onPlayerInitialize,
+      onPlayerInit: this._onPlayerInit,
       onVideoOpen: this._onOpen,
       onVideoError: this._onError,
       onVideoProgress: this._onProgress,
