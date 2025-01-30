@@ -92,19 +92,19 @@ Just insert the react-native-vlc-media-player plugin to the "plugins" array from
 
 ```json
 {
-    "plugins": [
-        [
-            "react-native-vlc-media-player",
-            {
-                "ios": {
-                    "includeVLCKit": false // should be true if react-native version < 0.61
-                },
-                "android": {
-                    "legacyJetifier": false // should be true if react-native version < 0.71
-                }
-            }
-        ]
+  "plugins": [
+    [
+      "react-native-vlc-media-player",
+      {
+        "ios": {
+          "includeVLCKit": false // should be true if react-native version < 0.61
+        },
+        "android": {
+          "legacyJetifier": false // should be true if react-native version < 0.71
+        }
+      }
     ]
+  ]
 }
 ```
 
@@ -218,6 +218,7 @@ Video coding formats: Cinepak, Dirac, DV, H.263, H.264/MPEG-4 AVC, H.265/MPEG HE
 [ammarahm-ed](https://github.com/ammarahm-ed)
 [Nghi-NV](https://github.com/Nghi-NV)
 [xuyuanzhou](https://github.com/xuyuanzhou)
+[ppegu](https://github.com/ppegu)
 
 ## sponsors
 

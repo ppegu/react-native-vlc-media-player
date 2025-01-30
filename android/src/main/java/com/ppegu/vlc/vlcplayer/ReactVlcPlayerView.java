@@ -1,4 +1,4 @@
-package com.yuanzhou.vlc.vlcplayer;
+package com.ppegu.vlc.vlcplayer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
